@@ -1,41 +1,58 @@
-#INPUT-----------------------------------------------------------------
-puts "Which Month Do You Want To See?"
-puts "e.x. 01 2012, Jan 2012, january 2012, etc."
-input = gets.chomp
-input.downcase!
+#INPUT------------------------------------------------------
+input = []
+ARGV.each do |arg|
+  input << arg
+end
 
-input.capitalize!
-puts "Here is your initial input: #{input}"
+month = input[0].dup
+year = input[1].dup
+month.chomp!
+year.chomp!
+
+#in refactor stage, use regex to find abbreviations for months
+months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+
+#checks to see if the written format rather than the number format
+if month.length > 3
+  month.downcase!
+  month.capitalize!
+
+  #converts to number format
+  month = months.index(month)
+  month += 1
+end
+
+#ZELLERS CONGRUENCE--------------------------------------------------
+h = ""
+q = 1
+m = month.to_i
+K = year[2,3].to_i
+J = year[0,2].to_i
+#puts "m: #{m}, K: #{K}, J: #{J}"
+
+#m = 13 if m == 01
+#m = 14 if m == 02
+
+h = ( (q + ((13*(m+1))/5) + K + (K/4) + (J/4) + (5*J) ) % 7 )
+
+
+#PRINT----------------------------------------------------------------
+#in refactor stage, use regex to find abbreviations for months
+days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+temp_day = days[h]
+temp_month = months[q-1]
+print "Your date is #{temp_day}, #{temp_month} #{q}, #{year}"
 
 
 
-#ZELLERS CONGRUENCE---------------------------------------------------
-=begin
+
+
+#NOTE FOR ZELLERS CONGRUENCE-------------
 #test case = Sunday, January 1st, 2012
-#[sun, mon, tues, wed, thurs, fri, sat] =
-#[0,1,2,3,4,5,6]
 #h = day of week (unknown)
 #q = day of month (date, 01-31)
 #m = month (01 or January)
 #K = year of the century (12 for 2012)
 #J = century (20 for 2012)
-puts "Test case = Sunday, January 1st, 2012"
-h = ""
-q = 01
-m = 01
-K = 12
-J = 20
-
-#m = 13 if m == 01
-#m = 14 if m == 02
-
-h = ((q + (((m+1)*26)/10) + K + (K/4) + (J/4) +(5*J)) % 7)
-puts h
-
-#PRINT----------------------------------------------------------------
-days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-temp_day = days[h]
-temp_month = months[q]
-puts "Your date is #{temp_day}, #{temp_month} #{q}, #{J}#{K}"
-=end
+#must chomp leading zeros (e.x. 8 for 08) because it will give an invalid octal error
