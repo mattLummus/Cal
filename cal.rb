@@ -39,41 +39,93 @@ if m < 3
 else
   h = ( (q + ((13*(m+1))/5) + k + (k/4) + (j/4) + (5*j) ) % 7 )
 end
-
+h -= 1
 
 #PRINT 1ST DAY OF MONTH----------------------------------------------------------------
 #in refactor stage, use regex to find abbreviations for months
-days = [ "Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 temp_day = days[h]
 m -= 12 if m > 12
 temp_month = months[m-1]
-print "Your date is #{temp_day}, #{temp_month} #{q}, #{year}"
+#print "Your date is #{temp_day}, #{temp_month} #{q}, #{year}"
 
 #PRINT MONTH CALENDAR----------------------------------------------------------------
 =begin
     January 2012
-20spaces
-11111111111111111111
-2char + 1 space
 Su Mo Tu We Th Fr Sa
-1char1space||2char + 1 spaces
  1  2  3  4  5  6  7
  8  9 10 11 12 13 14
 15 16 17 18 19 20 21
 22 23 24 25 26 27 28
 29 30 31
-
-
-
-
 =end
 
-#NOTE FOR ZELLERS CONGRUENCE-------------
-#test case = Sunday, January 1st, 2012
-#h = day of week (unknown)
-#q = day of month (date, 01-31)
-#m = month (01 or January)
-#K = year of the century (12 for 2012)
-#J = century (20 for 2012)
-#must chomp leading zeros (e.x. 8 for 08) because it will give an invalid octal error
+#CAL HEADER-------
+total_length = 20
+month_length = temp_month.length
+if month_length % 2 == 0
+  #extra_space is the space between the month and year
+  extra_space = 2
+else
+  extra_space = 1
+end
+#margin_space = total_length - (January 2012) divided by 2
+#used for margins on left and right
+margin_space = (total_length - (month_length + extra_space + 4)) / 2
+
+header = ""
+margin_space.times { header << " " }
+header << temp_month
+extra_space.times { header << " " }
+header << year.to_s
+margin_space.times { header << " " }
+puts header
+puts "Su Mo Tu We Th Fr Sa"
+
+#CAL DATES-------
+#days is static for now, will be 28-31 in real implementation
+#day is counter for which day to print
+days = 31
+day = 1
+count = 0
+row = ""
+leading_space = (h*3) + 1
+count += leading_space
+leading_space.times do
+  row << " "
+end
+row << "1"
+count += 1
+day += 1
+
+#finish 1st row
+while count < 20
+  if day < 10
+    row << "  "
+  else
+    row << " "
+  end
+  row << day.to_s
+  day += 1
+  count += 3
+end
+puts row
+
+#other rows
+while day <= days
+  count = 0
+  row = ""
+  day_count = 0
+  while day_count <= 7
+    day_count += 1
+    while count < 20
+      row << " " if day < 10
+      row << day.to_s
+      day += 1
+      count += 3
+      row << " "
+    end
+  end
+  puts row
+end
