@@ -3,21 +3,6 @@ require "minitest/autorun"
 
 class TestCal < MiniTest::Unit::TestCase
 
-=begin
-  def test_format_cal_header_01_2012
-    shell_output = ""
-    IO.popen('ruby cal.rb 01 2012', 'r+') do |pipe|
-      pipe.close_write
-      shell_output = pipe.read
-    end
-    expected_output = <<EOS
-    January 2012
-Su Mo Tu We Th Fr Sa
-EOS
-    assert_equal expected_output, shell_output
-  end
-=end
-
   def test_format_cal_header_03_2012
     shell_output = ""
     IO.popen('ruby cal.rb 03 2012', 'r+') do |pipe|
@@ -33,6 +18,7 @@ EOS
   end
 
 
+#TESTS COMMENTED OUT BECAUSE THEY ARE PASSING AND TEXT OUTPUT HAS BEEN REPLACED BY CALENDAR
 =begin
 #FORMAT TESTS--------------------------------------
   #naive input
