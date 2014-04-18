@@ -1,140 +1,198 @@
 #!/usr/bin/env ruby
-#INPUT------------------------------------------------------
-input = ARGV
 
-month = input[0].dup
-year = input[1].dup
-month.chomp!
-year.chomp!
-year = year.to_i
+class Calendar
+  attr_accessor :month
+  attr_accessor :year
+  attr_accessor :annual
+  attr_accessor :calendar
 
-#in refactor stage, use regex to find abbreviations for months
-months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-
-#checks to see if the written format rather than the number format
-if month.length > 3
-  month.downcase!
-  month.capitalize!
-
-  #converts to number format
-  month = months.index(month)
-  month += 1
-end
-
-#ZELLERS CONGRUENCE--------------------------------------------------
-h = ""
-q = 1
-m = month.to_i
-k = year%100
-j = year/100
-y = year.to_i
-#puts "m: #{m}, K: #{K}, J: #{J}"
-
-if m < 3
-  y -= 1
-  m += 12
-  h = ( (q + (((m+1)*26)/10) + y + (y/4) + (6*(y/100)) + (y/400)) % 7 )
-else
-  h = ( (q + ((13*(m+1))/5) + k + (k/4) + (j/4) + (5*j) ) % 7 )
-end
-h -= 1
-
-#PRINT 1ST DAY OF MONTH----------------------------------------------------------------
-#in refactor stage, use regex to find abbreviations for months
-days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-day_array = [31, "x", 31, 30, 31, 30, 31, 30, 30, 31, 30, 31]
-temp_day = days[h]
-m -= 12 if m > 12
-temp_month = months[m-1]
-days = day_array[m-1]
-temp_year = year.to_i
-if days == "x"
-  if temp_year % 4 != 0
-    days = 28
-  elsif temp_year % 100 != 0 || temp_year % 400 == 0
-    days = 29
-  else
-    days = 28
+  def initialize(*args)
+    input = args[0]
+    if input.length == 1
+      year = input[0].dup
+      @month = "annual"
+    else
+      month = input[0].dup
+      year = input[1].dup
+      month.chomp!
+      @month = month
+    end
+    year.chomp!
+    @year = year.to_i
+    @months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    if @month == "annual"
+      self.annual(@year)
+      @annual = true
+      @calendar = []
+    else
+      self.zeller(@month, @year)
+      @annual = false
+    end
   end
-end
-#print "Your date is #{temp_day}, #{temp_month} #{q}, #{year}"
 
-#PRINT MONTH CALENDAR----------------------------------------------------------------
-#CAL HEADER-------
-total_length = 20
-month_length = temp_month.length
-if month_length % 2 == 0
-  #extra_space is the space between the month and year
-  extra_space = 2
-else
-  extra_space = 1
-end
-#margin_space = total_length - (January 2012) divided by 2
-#used for margins on left and right
-margin_space = (total_length - (month_length + extra_space + 4)) / 2
-
-header = ""
-margin_space.times { header << " " }
-header << temp_month
-extra_space.times { header << " " }
-header << year.to_s
-margin_space.times { header << " " }
-puts header
-puts "Su Mo Tu We Th Fr Sa"
-
-#CAL DATES-------
-#days is static for now, will be 28-31 in real implementation
-#day is counter for which day to print
-day = 1
-count = 0
-row = ""
-h = 6 if h == -1
-leading_space = (h*3) + 1
-count += leading_space
-leading_space.times do
-  row << " "
-end
-row << "1"
-count += 1
-day += 1
-
-#finish 1st row
-while count < 20
-  if day < 10
-    row << "  "
-  else
-    row << " "
+  def annual(year)
+    #puts "Annual calendar for year #{year}"
+    month = 0
+    12.times do
+      month += 1
+      self.zeller(month, year)
+    end
   end
-  row << day.to_s
-  day += 1
-  count += 3
-end
-puts row
 
-#other rows
-while day <= days
-  count = 0
-  row = ""
-  day_count = 0
-  while day_count <= 7
-    day_count += 1
+  def zeller(month, year)
+    #puts "date: #{month} #{year}"
+    #checks to see if the written format rather than the number format
+    if month.to_s.length > 3
+      month.downcase!
+      month.capitalize!
+
+      #converts to number format
+      month = months.index(month)
+      month += 1
+    end
+
+    h = ""
+    q = 1
+    m = month.to_i
+    k = year%100
+    j = year/100
+    y = year.to_i
+
+    if m < 3
+      y -= 1
+      m += 12
+      h = ( (q + (((m+1)*26)/10) + y + (y/4) + (6*(y/100)) + (y/400)) % 7 )
+    else
+      h = ( (q + ((13*(m+1))/5) + k + (k/4) + (j/4) + (5*j) ) % 7 )
+    end
+    h -= 1
+
+    assemble_month(h, m, @year)
+
+    #end zeller
+  end
+
+  def assemble_month(h, m, year)
+    #SETUP----------
+
+    #contains array of strings to be assembled when printed
+    this_month = []
+
+    days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+    day_array = [31, "x", 31, 30, 31, 30, 31, 30, 30, 31, 30, 31]
+    temp_day = days[h]
+    m -= 12 if m > 12
+    temp_month = @months[m-1]
+    days = day_array[m-1]
+    temp_year = year.to_i
+    if days == "x"
+      if temp_year % 4 != 0
+        days = 28
+      elsif temp_year % 100 != 0 || temp_year % 400 == 0
+        days = 29
+      else
+        days = 28
+      end
+    end
+
+    #CAL HEADER-------
+    total_length = 20
+    month_length = temp_month.length
+    margin_space = (total_length - (month_length + 5)) / 2
+
+    header = ""
+    margin_space.times { header << " " }
+    header << temp_month
+    header << " "
+    header << year.to_s
+    #push header to array
+    this_month << header
+    this_month << "Su Mo Tu We Th Fr Sa"
+
+    #CAL DATES-------
+    day = 1
+    count = 0
+    row = ""
+    h = 6 if h == -1
+    leading_space = (h*3) + 1
+    count += leading_space
+    leading_space.times do
+      row << " "
+    end
+    row << "1"
+    count += 1
+    day += 1
+
+    #finish 1st row
     while count < 20
-      row << " " if day < 10
+      if day < 10
+        row << "  "
+      else
+        row << " "
+      end
       row << day.to_s
       day += 1
       count += 3
-      row << " "
+    end
+    #push 1st row to array
+    this_month << row
+    row_count = 1
+
+    #other rows
+    while day <= days
+      count = 0
+      row = ""
+      day_count = 0
+      while day_count <= 7
+        day_count += 1
+        while count < 20
+          row << " " if day < 10
+          row << day.to_s
+          day += 1
+          count += 3
+          row << " " if count < 19
+        end
+      end
+
+      #chops at last day
+      last_day = row.index(days.to_s)
+      row = row[0,last_day+2] if last_day
+
+      #push other rows to array
+      this_month << row
+      row_count += 1
+    end
+    (6 - row_count).times {this_month << ""}
+
+    if @annual
+      @calendar << this_month
+      annual_print if @calendar.length == 12
+    else
+      single_print(this_month)
+    end
+
+      #end of assemble_month
+    end
+
+  def single_print(this_month)
+    this_month.each do |line|
+      puts line
     end
   end
 
-#chops at last day
-  last_day = row.index(days.to_s)
-  if last_day
-    row = row[0,last_day+2]
-    (20-last_day).times do
-      row << " "
+=begin
+  def annual_print
+    @calendar.each do |month|
+      month.each do |line|
+        puts line
+      end
+      puts ---------------------
     end
   end
-  puts row
+=end
+
+  #end of class
 end
+
+#ARGV
+new_cal = Calendar.new(ARGV)

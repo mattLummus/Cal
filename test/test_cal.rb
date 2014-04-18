@@ -1,7 +1,355 @@
-#require_relative 'helper'
-require "minitest/autorun"
+require_relative 'helper'
+#require "minitest/autorun"
+require "test/unit"
 
-class TestCal < MiniTest::Unit::TestCase
+class TestCal < Test::Unit::TestCase
+
+
+#CALENDAR PRINT TESTS-------------------------------------
+# 01-2012, 02-2012, 12-2012, 01-2014, 02-2014, 03-2014, 02-2015, 12-2015 01-1800, 02-1800, 07-1800, 12-1800, 01-1803, 02-1803, 12-1803
+
+#2012
+  def test_cal_01_2012
+    shell_output = ""
+    expected_output = ""
+    IO.popen('./cal 01 2012', 'r+') do |pipe|
+      pipe.close_write
+      shell_output = pipe.read
+    end
+    IO.popen('cal 01 2012', 'r+') do |pipe|
+      pipe.close_write
+      expected_output = pipe.read
+    end
+    puts "-----------------------"
+    puts "cal_01_2012"
+    puts "expected_output:"
+    puts expected_output
+    puts "shell_output:"
+    puts shell_output
+    puts "-----------------------"
+    assert_equal expected_output, shell_output
+  end
+
+  def test_cal_02_2012
+    shell_output = ""
+    expected_output = ""
+    IO.popen('./cal 02 2012', 'r+') do |pipe|
+      pipe.close_write
+      shell_output = pipe.read
+    end
+    IO.popen('cal 02 2012', 'r+') do |pipe|
+      pipe.close_write
+      expected_output = pipe.read
+    end
+    puts "-----------------------"
+    puts "cal_02_2012"
+    puts "expected_output:"
+    puts expected_output
+    puts "shell_output:"
+    puts shell_output
+    puts "-----------------------"
+    assert_equal expected_output, shell_output
+  end
+
+  def test_cal_12_2012
+    shell_output = ""
+    expected_output = ""
+    IO.popen('./cal 12 2012', 'r+') do |pipe|
+      pipe.close_write
+      shell_output = pipe.read
+    end
+    IO.popen('cal 12 2012', 'r+') do |pipe|
+      pipe.close_write
+      expected_output = pipe.read
+    end
+    puts "-----------------------"
+    puts "cal_12_2012"
+    puts "expected_output:"
+    puts expected_output
+    puts "shell_output:"
+    puts shell_output
+    puts "-----------------------"
+    assert_equal expected_output, shell_output
+  end
+
+#2014
+  def test_cal_01_2014
+    shell_output = ""
+    expected_output = ""
+    IO.popen('./cal 01 2014', 'r+') do |pipe|
+      pipe.close_write
+      shell_output = pipe.read
+    end
+    IO.popen('cal 01 2014', 'r+') do |pipe|
+      pipe.close_write
+      expected_output = pipe.read
+    end
+    puts "-----------------------"
+    puts "cal_01_2014"
+    puts "expected_output:"
+    puts expected_output
+    puts "shell_output:"
+    puts shell_output
+    puts "-----------------------"
+    assert_equal expected_output, shell_output
+  end
+
+  def test_cal_02_2014
+    shell_output = ""
+    expected_output = ""
+    IO.popen('./cal 02 2014', 'r+') do |pipe|
+      pipe.close_write
+      shell_output = pipe.read
+    end
+    IO.popen('cal 02 2014', 'r+') do |pipe|
+      pipe.close_write
+      expected_output = pipe.read
+    end
+    puts "cal_02_2014"
+    puts "expected_output:"
+    puts expected_output
+    puts "shell_output:"
+    puts shell_output
+    assert_equal expected_output, shell_output
+  end
+
+  def test_cal_03_2014
+    shell_output = ""
+    expected_output = ""
+    IO.popen('./cal 03 2014', 'r+') do |pipe|
+      pipe.close_write
+      shell_output = pipe.read
+    end
+    IO.popen('cal 03 2014', 'r+') do |pipe|
+      pipe.close_write
+      expected_output = pipe.read
+    end
+    puts "-----------------------"
+    puts "cal_03_2014"
+    puts "expected_output:"
+    puts expected_output
+    puts "shell_output:"
+    puts shell_output
+    puts "-----------------------"
+    assert_equal expected_output, shell_output
+  end
+
+#2015
+  def test_cal_02_2015
+    shell_output = ""
+    expected_output = ""
+    IO.popen('./cal 02 2015', 'r+') do |pipe|
+      pipe.close_write
+      shell_output = pipe.read
+    end
+    IO.popen('cal 02 2015', 'r+') do |pipe|
+      pipe.close_write
+      expected_output = pipe.read
+    end
+    puts "-----------------------"
+    puts "cal_02_2015"
+    puts "expected_output:"
+    puts expected_output
+    puts "shell_output:"
+    puts shell_output
+    puts "-----------------------"
+    assert_equal expected_output, shell_output
+  end
+
+  def test_cal_12_2015
+    shell_output = ""
+    expected_output = ""
+    IO.popen('./cal 12 2015', 'r+') do |pipe|
+      pipe.close_write
+      shell_output = pipe.read
+    end
+    IO.popen('cal 12 2015', 'r+') do |pipe|
+      pipe.close_write
+      expected_output = pipe.read
+    end
+    puts "-----------------------"
+    puts "cal_12_2015"
+    puts "expected_output:"
+    puts expected_output
+    puts "shell_output:"
+    puts shell_output
+    puts "-----------------------"
+    assert_equal expected_output, shell_output
+  end
+
+#1800
+  def test_cal_01_1800
+    shell_output = ""
+    expected_output = ""
+    IO.popen('./cal 01 1800', 'r+') do |pipe|
+      pipe.close_write
+      shell_output = pipe.read
+    end
+    IO.popen('cal 01 1800', 'r+') do |pipe|
+      pipe.close_write
+      expected_output = pipe.read
+    end
+    puts "-----------------------"
+    puts "cal_01_1800"
+    puts "expected_output:"
+    puts expected_output
+    puts "shell_output:"
+    puts shell_output
+    puts "-----------------------"
+    assert_equal expected_output, shell_output
+  end
+
+  def test_cal_02_1800
+    shell_output = ""
+    expected_output = ""
+    IO.popen('./cal 02 1800', 'r+') do |pipe|
+      pipe.close_write
+      shell_output = pipe.read
+    end
+    IO.popen('cal 02 1800', 'r+') do |pipe|
+      pipe.close_write
+      expected_output = pipe.read
+    end
+    puts "-----------------------"
+    puts "cal_02_1800"
+    puts "expected_output:"
+    puts expected_output
+    puts "shell_output:"
+    puts shell_output
+    puts "-----------------------"
+    assert_equal expected_output, shell_output
+  end
+
+  def test_cal_07_1800
+    shell_output = ""
+    expected_output = ""
+    IO.popen('./cal 07 1800', 'r+') do |pipe|
+      pipe.close_write
+      shell_output = pipe.read
+    end
+    IO.popen('cal 07 1800', 'r+') do |pipe|
+      pipe.close_write
+      expected_output = pipe.read
+    end
+    puts "-----------------------"
+    puts "cal_07_1800"
+    puts "expected_output:"
+    puts expected_output
+    puts "shell_output:"
+    puts shell_output
+    puts "-----------------------"
+    assert_equal expected_output, shell_output
+  end
+
+  def test_cal_12_1800
+    shell_output = ""
+    expected_output = ""
+    IO.popen('./cal 12 1800', 'r+') do |pipe|
+      pipe.close_write
+      shell_output = pipe.read
+    end
+    IO.popen('cal 12 1800', 'r+') do |pipe|
+      pipe.close_write
+      expected_output = pipe.read
+    end
+    puts "-----------------------"
+    puts "cal_12_1800"
+    puts "expected_output:"
+    puts expected_output
+    puts "shell_output:"
+    puts shell_output
+    puts "-----------------------"
+    assert_equal expected_output, shell_output
+  end
+
+#1803
+  def test_cal_01_1803
+    shell_output = ""
+    expected_output = ""
+    IO.popen('./cal 01 1803', 'r+') do |pipe|
+      pipe.close_write
+      shell_output = pipe.read
+    end
+    IO.popen('cal 01 1803', 'r+') do |pipe|
+      pipe.close_write
+      expected_output = pipe.read
+    end
+    puts "-----------------------"
+    puts "cal_01_1803"
+    puts "expected_output:"
+    puts expected_output
+    puts "shell_output:"
+    puts shell_output
+    puts "-----------------------"
+    assert_equal expected_output, shell_output
+  end
+
+  def test_cal_02_1803
+    shell_output = ""
+    expected_output = ""
+    IO.popen('./cal 02 1803', 'r+') do |pipe|
+      pipe.close_write
+      shell_output = pipe.read
+    end
+    IO.popen('cal 02 1803', 'r+') do |pipe|
+      pipe.close_write
+      expected_output = pipe.read
+    end
+    puts "-----------------------"
+    puts "cal_02_1803"
+    puts "expected_output:"
+    puts expected_output
+    puts "shell_output:"
+    puts shell_output
+    puts "-----------------------"
+    assert_equal expected_output, shell_output
+  end
+
+  def test_cal_07_1803
+    shell_output = ""
+    expected_output = ""
+    IO.popen('./cal 07 1803', 'r+') do |pipe|
+      pipe.close_write
+      shell_output = pipe.read
+    end
+    IO.popen('cal 07 1803', 'r+') do |pipe|
+      pipe.close_write
+      expected_output = pipe.read
+    end
+    puts "-----------------------"
+    puts "cal_07_1803"
+    puts "expected_output:"
+    puts expected_output
+    puts "shell_output:"
+    puts shell_output
+    puts "-----------------------"
+    assert_equal expected_output, shell_output
+  end
+
+  def test_cal_12_1803
+    shell_output = ""
+    expected_output = ""
+    IO.popen('./cal 12 1803', 'r+') do |pipe|
+      pipe.close_write
+      shell_output = pipe.read
+    end
+    IO.popen('cal 12 1803', 'r+') do |pipe|
+      pipe.close_write
+      expected_output = pipe.read
+    end
+    puts "-----------------------"
+    puts "cal_12_1803"
+    puts "expected_output:"
+    puts expected_output
+    puts "shell_output:"
+    puts shell_output
+    puts "-----------------------"
+    assert_equal expected_output, shell_output
+  end
+
+
+#TESTS COMMENTED OUT BECAUSE THEY ARE PASSING AND TEXT OUTPUT HAS BEEN REPLACED BY CALENDAR
+=begin
 
   def test_format_cal_header_03_2012
     shell_output = ""
@@ -16,10 +364,6 @@ Su Mo Tu We Th Fr Sa
 EOS
     assert_equal expected_output, shell_output
   end
-
-
-#TESTS COMMENTED OUT BECAUSE THEY ARE PASSING AND TEXT OUTPUT HAS BEEN REPLACED BY CALENDAR
-=begin
 #FORMAT TESTS--------------------------------------
   #naive input
   def test_format_1_2012
