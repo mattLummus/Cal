@@ -4,25 +4,48 @@ class Calendar
   attr_accessor :month
   attr_accessor :year
   attr_accessor :calendar
+  attr_accessor :rows
 
   def initialize(*args)
     input = args[0]
+    @months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+
     if input.length == 1
       year = input[0].dup
       @month = "annual"
+      @rows = 4
+      year.chomp!
+      @year = year.to_i
+      @calendar = []
+      self.annual(@year)
+    elsif input.length > 2
+      if input.length == 3 && input[1] == "rows"
+        rows = input[2].dup
+        @rows = rows.to_i
+        #acceptable number of rows
+        if @rows == 2 || @rows == 3 || @rows ==4 || @rows == 6 || @rows == 12
+          year = input[0].dup
+          @month = "annual"
+          year.chomp!
+          @year = year.to_i
+          @calendar = []
+          self.annual(@year)
+        else
+          puts "INPUT ERROR"
+          puts "Accepted Format is: 2014, 01 2014, January 2014, or 2014 rows 2"
+          puts "Number of rows must be either 2, 3, 4, 6, 12, or unspecified"
+        end
+      else
+        puts "INPUT ERROR"
+        puts "Accepted Format is: 2014, 01 2014, January 2014, or 2014 rows 2"
+      end
     else
       month = input[0].dup
       year = input[1].dup
       month.chomp!
       @month = month
-    end
-    year.chomp!
-    @year = year.to_i
-    @months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-    if @month == "annual"
-      @calendar = []
-      self.annual(@year)
-    else
+      year.chomp!
+      @year = year.to_i
       self.zeller(@month, @year, false)
     end
   end #of initialize
@@ -63,7 +86,6 @@ class Calendar
     h -= 1
 
     assemble_month(h, m, @year, annual)
-
   end #of zeller
 
 #--------------------------------------------------------
@@ -184,37 +206,42 @@ class Calendar
   end
 
   def annual_print
+    rows = @rows
+    columns = 12 / rows
+    puts "#{rows} rows X #{columns} columns"
     #offsets months to print by (0,3,6,9)
     title_line = ""
-    29.times {title_line << " "}
+    title_space = ( (20*columns) + (2*(columns-1)) -4 ) / 2
+    (title_space).times {title_line << " "}
     title_line << @year.to_s
     puts title_line
     line_break = ""
     puts line_break
     index = 0
-    4.times do #rows
-      month_one = @calendar[index]
-      month_two = @calendar[index + 1]
-      month_three = @calendar[index + 2]
-      temp_months = [month_one, month_two, month_three]
+    rows.times do #rows
+      temp_months = []
+      column_index = 0
+      columns.times do
+        temp_months << @calendar[index + column_index]
+        column_index += 1
+      end
       line_index = 0
       8.times do #lines per row
         temp_string = ""
         inner_index = 0
-        3.times do #each month per row per line
+        columns.times do #each month per row per line
           temp_month = temp_months[inner_index]
           temp_line = temp_month[line_index]
           temp_string << temp_line
           (20 - temp_line.length).times {temp_string << " "}
-          temp_string << "  " if inner_index < 2
-          puts temp_string if inner_index == 2
+          temp_string << "  " if inner_index < columns - 1
+          puts temp_string if inner_index == columns - 1
           inner_index += 1
         end #of inner loop (iterates through each month)
         line_index += 1
       end #of row loop (concats 3 months into 6 lines)
-      index += 3
+      index += columns
     end #of column loop (4 sets of 3's)
-
   end #of annual_print
 
 end #of class
