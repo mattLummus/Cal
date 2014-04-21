@@ -208,11 +208,11 @@ class Calendar
   def annual_print
     rows = @rows
     columns = 12 / rows
-    puts "#{rows} rows X #{columns} columns"
+    #puts "#{rows} rows X #{columns} columns"
     #offsets months to print by (0,3,6,9)
     title_line = ""
     title_space = ( (20*columns) + (2*(columns-1)) -4 ) / 2
-    (title_space).times {title_line << " "}
+    (title_space - 1).times {title_line << " "}
     title_line << @year.to_s
     puts title_line
     line_break = ""
@@ -233,7 +233,10 @@ class Calendar
           temp_month = temp_months[inner_index]
           temp_line = temp_month[line_index]
           temp_string << temp_line
-          (20 - temp_line.length).times {temp_string << " "}
+          #if line_index != 0 || inner_index != 2
+          if inner_index != columns - 1
+            (20 - temp_line.length).times {temp_string << " "}
+          end
           temp_string << "  " if inner_index < columns - 1
           puts temp_string if inner_index == columns - 1
           inner_index += 1

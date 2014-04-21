@@ -3,6 +3,19 @@ require "test/unit"
 
 class TestCal < Test::Unit::TestCase
 
+#NUMBER OF ROWS TESTS-------------------------------------
+=begin
+  def test_cal_2012_rows_02
+    shell_output = ""
+    expected_output = ""
+    IO.popen('./cal 2014 rows 2', 'r+') do |pipe|
+      pipe.close_write
+      shell_output = pipe.read
+    end
+    assert_equal "", shell_output
+  end
+=end
+
 #SINGLE MONTH PRINT TESTS-------------------------------------
 #2012, 2014, 2015, 1800, 1803, 2000, 2500, 3000
 
