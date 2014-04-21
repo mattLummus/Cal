@@ -1,11 +1,110 @@
 require_relative 'helper'
-#require "minitest/autorun"
 require "test/unit"
 
 class TestCal < Test::Unit::TestCase
 
+#SINGLE MONTH PRINT TESTS-------------------------------------
+#2012, 2014, 2015, 1800, 1803, 2000, 2500, 3000
 
-#CALENDAR PRINT TESTS-------------------------------------
+  def test_cal_year_2012
+    shell_output = ""
+    expected_output = ""
+    IO.popen('./cal 2012', 'r+') do |pipe|
+      pipe.close_write
+      shell_output = pipe.read
+    end
+    IO.popen('cal 2012', 'r+') do |pipe|
+      pipe.close_write
+      expected_output = pipe.read
+    end
+    assert_equal expected_output, shell_output
+  end
+
+  def test_cal_year_2014
+    shell_output = ""
+    expected_output = ""
+    IO.popen('./cal 2014', 'r+') do |pipe|
+      pipe.close_write
+      shell_output = pipe.read
+    end
+    IO.popen('cal 2014', 'r+') do |pipe|
+      pipe.close_write
+      expected_output = pipe.read
+    end
+    assert_equal expected_output, shell_output
+  end
+
+  def test_cal_year_2015
+    shell_output = ""
+    expected_output = ""
+    IO.popen('./cal 2015', 'r+') do |pipe|
+      pipe.close_write
+      shell_output = pipe.read
+    end
+    IO.popen('cal 2015', 'r+') do |pipe|
+      pipe.close_write
+      expected_output = pipe.read
+    end
+    assert_equal expected_output, shell_output
+  end
+
+  def test_cal_year_1800
+    shell_output = ""
+    expected_output = ""
+    IO.popen('./cal 1800', 'r+') do |pipe|
+      pipe.close_write
+      shell_output = pipe.read
+    end
+    IO.popen('cal 1800', 'r+') do |pipe|
+      pipe.close_write
+      expected_output = pipe.read
+    end
+    assert_equal expected_output, shell_output
+  end
+
+  def test_cal_year_2000
+    shell_output = ""
+    expected_output = ""
+    IO.popen('./cal 2000', 'r+') do |pipe|
+      pipe.close_write
+      shell_output = pipe.read
+    end
+    IO.popen('cal 2000', 'r+') do |pipe|
+      pipe.close_write
+      expected_output = pipe.read
+    end
+    assert_equal expected_output, shell_output
+  end
+
+  def test_cal_year_2500
+    shell_output = ""
+    expected_output = ""
+    IO.popen('./cal 2500', 'r+') do |pipe|
+      pipe.close_write
+      shell_output = pipe.read
+    end
+    IO.popen('cal 2500', 'r+') do |pipe|
+      pipe.close_write
+      expected_output = pipe.read
+    end
+    assert_equal expected_output, shell_output
+  end
+
+  def test_cal_year_3000
+    shell_output = ""
+    expected_output = ""
+    IO.popen('./cal 3000', 'r+') do |pipe|
+      pipe.close_write
+      shell_output = pipe.read
+    end
+    IO.popen('cal 3000', 'r+') do |pipe|
+      pipe.close_write
+      expected_output = pipe.read
+    end
+    assert_equal expected_output, shell_output
+  end
+
+#SINGLE MONTH PRINT TESTS-------------------------------------
 # 01-2012, 02-2012, 12-2012, 01-2014, 02-2014, 03-2014, 02-2015, 12-2015 01-1800, 02-1800, 07-1800, 12-1800, 01-1803, 02-1803, 12-1803
 
 #2012

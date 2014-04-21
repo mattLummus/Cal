@@ -3,7 +3,6 @@
 class Calendar
   attr_accessor :month
   attr_accessor :year
-  attr_accessor :annual
   attr_accessor :calendar
 
   def initialize(*args)
@@ -21,26 +20,22 @@ class Calendar
     @year = year.to_i
     @months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
     if @month == "annual"
-      self.annual(@year)
-      @annual = true
       @calendar = []
+      self.annual(@year)
     else
-      self.zeller(@month, @year)
-      @annual = false
+      self.zeller(@month, @year, false)
     end
-  end
+  end #of initialize
 
   def annual(year)
-    #puts "Annual calendar for year #{year}"
     month = 0
     12.times do
       month += 1
-      self.zeller(month, year)
+      self.zeller(month, year, true)
     end
   end
 
-  def zeller(month, year)
-    #puts "date: #{month} #{year}"
+  def zeller(month, year, annual)
     #checks to see if the written format rather than the number format
     if month.to_s.length > 3
       month.downcase!
@@ -67,19 +62,20 @@ class Calendar
     end
     h -= 1
 
-    assemble_month(h, m, @year)
+    assemble_month(h, m, @year, annual)
 
-    #end zeller
-  end
+  end #of zeller
 
-  def assemble_month(h, m, year)
+#--------------------------------------------------------
+
+  def assemble_month(h, m, year, annual)
     #SETUP----------
 
     #contains array of strings to be assembled when printed
     this_month = []
 
     days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-    day_array = [31, "x", 31, 30, 31, 30, 31, 30, 30, 31, 30, 31]
+    day_array = [31, "x", 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
     temp_day = days[h]
     m -= 12 if m > 12
     temp_month = @months[m-1]
@@ -98,13 +94,19 @@ class Calendar
     #CAL HEADER-------
     total_length = 20
     month_length = temp_month.length
-    margin_space = (total_length - (month_length + 5)) / 2
-
     header = ""
-    margin_space.times { header << " " }
-    header << temp_month
-    header << " "
-    header << year.to_s
+    if @month == "annual"
+      margin_space = (total_length - month_length) / 2
+      margin_space.times { header << " " }
+      header << temp_month
+    else
+      margin_space = (total_length - (month_length + 5)) / 2
+      margin_space.times { header << " " }
+      header << temp_month
+      header << " "
+      header << year.to_s
+    end
+
     #push header to array
     this_month << header
     this_month << "Su Mo Tu We Th Fr Sa"
@@ -164,15 +166,16 @@ class Calendar
     end
     (6 - row_count).times {this_month << ""}
 
-    if @annual
+    if annual == true
       @calendar << this_month
       annual_print if @calendar.length == 12
     else
       single_print(this_month)
     end
 
-      #end of assemble_month
-    end
+  end #of assemble_month
+
+#--------------------------------------------------------
 
   def single_print(this_month)
     this_month.each do |line|
@@ -180,19 +183,40 @@ class Calendar
     end
   end
 
-=begin
   def annual_print
-    @calendar.each do |month|
-      month.each do |line|
-        puts line
-      end
-      puts ---------------------
-    end
-  end
-=end
+    #offsets months to print by (0,3,6,9)
+    title_line = ""
+    29.times {title_line << " "}
+    title_line << @year.to_s
+    puts title_line
+    line_break = ""
+    puts line_break
+    index = 0
+    4.times do #rows
+      month_one = @calendar[index]
+      month_two = @calendar[index + 1]
+      month_three = @calendar[index + 2]
+      temp_months = [month_one, month_two, month_three]
+      line_index = 0
+      8.times do #lines per row
+        temp_string = ""
+        inner_index = 0
+        3.times do #each month per row per line
+          temp_month = temp_months[inner_index]
+          temp_line = temp_month[line_index]
+          temp_string << temp_line
+          (20 - temp_line.length).times {temp_string << " "}
+          temp_string << "  " if inner_index < 2
+          puts temp_string if inner_index == 2
+          inner_index += 1
+        end #of inner loop (iterates through each month)
+        line_index += 1
+      end #of row loop (concats 3 months into 6 lines)
+      index += 3
+    end #of column loop (4 sets of 3's)
 
-  #end of class
-end
+  end #of annual_print
 
-#ARGV
+end #of class
+
 new_cal = Calendar.new(ARGV)
