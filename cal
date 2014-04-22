@@ -10,7 +10,12 @@ class Calendar
     input = args[0]
     @months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
-    if input.length == 1
+    if input.length == 0
+      time = Time.new
+      @month = time.month
+      @year = time.year
+      self.zeller(@month, @year, false)
+    elsif input.length == 1
       year = input[0].dup
       @month = "annual"
       @rows = 4
