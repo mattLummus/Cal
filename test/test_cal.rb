@@ -136,13 +136,6 @@ class TestCal < Test::Unit::TestCase
       pipe.close_write
       expected_output = pipe.read
     end
-    puts "-----------------------"
-    puts "cal_01_2012"
-    puts "expected_output:"
-    puts expected_output
-    puts "shell_output:"
-    puts shell_output
-    puts "-----------------------"
     assert_equal expected_output, shell_output
   end
 
@@ -157,13 +150,6 @@ class TestCal < Test::Unit::TestCase
       pipe.close_write
       expected_output = pipe.read
     end
-    puts "-----------------------"
-    puts "cal_02_2012"
-    puts "expected_output:"
-    puts expected_output
-    puts "shell_output:"
-    puts shell_output
-    puts "-----------------------"
     assert_equal expected_output, shell_output
   end
 
@@ -178,13 +164,6 @@ class TestCal < Test::Unit::TestCase
       pipe.close_write
       expected_output = pipe.read
     end
-    puts "-----------------------"
-    puts "cal_12_2012"
-    puts "expected_output:"
-    puts expected_output
-    puts "shell_output:"
-    puts shell_output
-    puts "-----------------------"
     assert_equal expected_output, shell_output
   end
 
@@ -200,13 +179,6 @@ class TestCal < Test::Unit::TestCase
       pipe.close_write
       expected_output = pipe.read
     end
-    puts "-----------------------"
-    puts "cal_01_2014"
-    puts "expected_output:"
-    puts expected_output
-    puts "shell_output:"
-    puts shell_output
-    puts "-----------------------"
     assert_equal expected_output, shell_output
   end
 
@@ -221,11 +193,6 @@ class TestCal < Test::Unit::TestCase
       pipe.close_write
       expected_output = pipe.read
     end
-    puts "cal_02_2014"
-    puts "expected_output:"
-    puts expected_output
-    puts "shell_output:"
-    puts shell_output
     assert_equal expected_output, shell_output
   end
 
@@ -240,13 +207,6 @@ class TestCal < Test::Unit::TestCase
       pipe.close_write
       expected_output = pipe.read
     end
-    puts "-----------------------"
-    puts "cal_03_2014"
-    puts "expected_output:"
-    puts expected_output
-    puts "shell_output:"
-    puts shell_output
-    puts "-----------------------"
     assert_equal expected_output, shell_output
   end
 
@@ -262,13 +222,6 @@ class TestCal < Test::Unit::TestCase
       pipe.close_write
       expected_output = pipe.read
     end
-    puts "-----------------------"
-    puts "cal_02_2015"
-    puts "expected_output:"
-    puts expected_output
-    puts "shell_output:"
-    puts shell_output
-    puts "-----------------------"
     assert_equal expected_output, shell_output
   end
 
@@ -283,13 +236,6 @@ class TestCal < Test::Unit::TestCase
       pipe.close_write
       expected_output = pipe.read
     end
-    puts "-----------------------"
-    puts "cal_12_2015"
-    puts "expected_output:"
-    puts expected_output
-    puts "shell_output:"
-    puts shell_output
-    puts "-----------------------"
     assert_equal expected_output, shell_output
   end
 
@@ -305,13 +251,6 @@ class TestCal < Test::Unit::TestCase
       pipe.close_write
       expected_output = pipe.read
     end
-    puts "-----------------------"
-    puts "cal_01_1800"
-    puts "expected_output:"
-    puts expected_output
-    puts "shell_output:"
-    puts shell_output
-    puts "-----------------------"
     assert_equal expected_output, shell_output
   end
 
@@ -326,13 +265,6 @@ class TestCal < Test::Unit::TestCase
       pipe.close_write
       expected_output = pipe.read
     end
-    puts "-----------------------"
-    puts "cal_02_1800"
-    puts "expected_output:"
-    puts expected_output
-    puts "shell_output:"
-    puts shell_output
-    puts "-----------------------"
     assert_equal expected_output, shell_output
   end
 
@@ -347,13 +279,6 @@ class TestCal < Test::Unit::TestCase
       pipe.close_write
       expected_output = pipe.read
     end
-    puts "-----------------------"
-    puts "cal_07_1800"
-    puts "expected_output:"
-    puts expected_output
-    puts "shell_output:"
-    puts shell_output
-    puts "-----------------------"
     assert_equal expected_output, shell_output
   end
 
@@ -368,13 +293,6 @@ class TestCal < Test::Unit::TestCase
       pipe.close_write
       expected_output = pipe.read
     end
-    puts "-----------------------"
-    puts "cal_12_1800"
-    puts "expected_output:"
-    puts expected_output
-    puts "shell_output:"
-    puts shell_output
-    puts "-----------------------"
     assert_equal expected_output, shell_output
   end
 
@@ -390,13 +308,6 @@ class TestCal < Test::Unit::TestCase
       pipe.close_write
       expected_output = pipe.read
     end
-    puts "-----------------------"
-    puts "cal_01_1803"
-    puts "expected_output:"
-    puts expected_output
-    puts "shell_output:"
-    puts shell_output
-    puts "-----------------------"
     assert_equal expected_output, shell_output
   end
 
@@ -411,13 +322,6 @@ class TestCal < Test::Unit::TestCase
       pipe.close_write
       expected_output = pipe.read
     end
-    puts "-----------------------"
-    puts "cal_02_1803"
-    puts "expected_output:"
-    puts expected_output
-    puts "shell_output:"
-    puts shell_output
-    puts "-----------------------"
     assert_equal expected_output, shell_output
   end
 
@@ -432,13 +336,6 @@ class TestCal < Test::Unit::TestCase
       pipe.close_write
       expected_output = pipe.read
     end
-    puts "-----------------------"
-    puts "cal_07_1803"
-    puts "expected_output:"
-    puts expected_output
-    puts "shell_output:"
-    puts shell_output
-    puts "-----------------------"
     assert_equal expected_output, shell_output
   end
 
@@ -453,13 +350,6 @@ class TestCal < Test::Unit::TestCase
       pipe.close_write
       expected_output = pipe.read
     end
-    puts "-----------------------"
-    puts "cal_12_1803"
-    puts "expected_output:"
-    puts expected_output
-    puts "shell_output:"
-    puts shell_output
-    puts "-----------------------"
     assert_equal expected_output, shell_output
   end
 

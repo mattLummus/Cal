@@ -1,13 +1,12 @@
 #!/usr/bin/env ruby
 
+#Calendar is called at end of file
 class Calendar
   attr_accessor :month
   attr_accessor :year
   attr_accessor :calendar
   attr_accessor :rows
-  attr_accessor :extra_rows
-  attr_accessor :columns
-  attr_accessor :array
+  attr_accessor :format_array
 
   def initialize(*args)
     input = args[0]
@@ -28,7 +27,7 @@ class Calendar
       year.chomp!
       @year = year.to_i
       @calendar = []
-      @array = [4, 3]
+      @format_array = [[4, 3]]
       self.annual(@year)
 
     #specified number of rows
@@ -43,9 +42,9 @@ class Calendar
           @month = "annual"
           year.chomp!
           @year = year.to_i
-          @columns = 12/@rows
+          columns = 12/@rows
           @calendar = []
-          @array = [[@rows, @columns]]
+          @format_array = [[@rows, columns]]
           self.annual(@year)
 
         #bad row argument
@@ -60,7 +59,7 @@ class Calendar
             @month = "annual"
             year.chomp!
             @year = year.to_i
-            @array = [[3, 3], [1, 2], [1, 1]]
+            @format_array = [[3, 3], [1, 2], [1, 1]]
             @calendar = []
             self.annual(@year)
 
@@ -70,11 +69,10 @@ class Calendar
             @month = "annual"
             year.chomp!
             @year = year.to_i
-            @columns = 2
             temp_rows = 12 % @rows
-            @extra_rows = @rows - (12 % @rows)
+            extra_rows = @rows - (12 % @rows)
             @rows = temp_rows
-            @array = [[@rows, 2], [@extra_rows, 1]]
+            @format_array = [[@rows, 2], [@extra_rows, 1]]
             @calendar = []
             self.annual(@year)
           end
@@ -98,6 +96,7 @@ class Calendar
     end
   end #of initialize
 
+
   def annual(year)
     month = 0
     12.times do
@@ -105,6 +104,7 @@ class Calendar
       self.zeller(month, year, true)
     end
   end
+
 
   def zeller(month, year, annual)
     #checks to see if the written format rather than the number format
@@ -136,7 +136,9 @@ class Calendar
     assemble_month(h, m, year, annual)
   end #of zeller
 
+
 #--------------------------------------------------------
+
 
   def assemble_month(h, m, year, annual)
     #contains array of strings to be assembled when printed
@@ -148,6 +150,7 @@ class Calendar
     m -= 12 if m > 12
     month = @months[m-1]
     days = day_array[m-1]
+
     if days == "x"
       if year % 4 != 0
         days = 28
@@ -203,6 +206,7 @@ class Calendar
       day += 1
       count += 3
     end
+
     #push 1st row to array
     this_month << row
     row_count = 1
@@ -242,7 +246,9 @@ class Calendar
 
   end #of assemble_month
 
+
 #--------------------------------------------------------
+
 
   def single_print(this_month)
     this_month.each do |line|
@@ -250,11 +256,12 @@ class Calendar
     end
   end
 
+
   def annual_print
-    array = @array
     print_title = true
     index = 0
-    array.each do |rows, columns|
+
+    @format_array.each do |rows, columns|
       if print_title == true
         title_line = ""
         title_space = ( (20*columns) + (2*(columns-1)) -4 ) / 2
@@ -264,6 +271,7 @@ class Calendar
         line_break = ""
         puts line_break
       end
+
       rows.times do #rows
         print_title = false
         temp_months = []
@@ -273,10 +281,12 @@ class Calendar
           column_index += 1
         end
         line_index = 0
+
         8.times do #lines per row
           temp_string = ""
           inner_index = 0
-          columns.times do #each month per row per line
+
+          columns.times do #each month per row
             temp_month = temp_months[inner_index]
             temp_line = temp_month[line_index]
             temp_string << temp_line
@@ -286,13 +296,16 @@ class Calendar
             temp_string << "  " if inner_index < columns - 1
             puts temp_string if inner_index == columns - 1
             inner_index += 1
-          end #of inner loop (iterates through each month)
+          end #of inner loop (iterates through each month on current row)
+
           line_index += 1
-        end #of row loop (concats 3 months into 6 lines)
+        end #of row loop (concats current months onto same lines)
+
         index += columns
-      end #of column loop (4 sets of 3's)
-    end #of irregular
+      end #of column loop
+    end #of format loop
   end #of annual_print
+
 
 end #of class
 
