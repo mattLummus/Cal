@@ -1,0 +1,112 @@
+#!/usr/bin/env ruby
+$LOAD_PATH << "lib"
+require 'zeller'
+require 'assemble_month'
+require 'print_cal'
+
+#Calendar is called at end of file
+class Calendar
+  attr_accessor :month
+  attr_accessor :year
+  attr_accessor :calendar
+  attr_accessor :rows
+  attr_accessor :format_array
+
+  def initialize(*args)
+    input = args[0]
+    @months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+
+    #current month (no input)
+    if input.length == 0
+      time = Time.new
+      @month = time.month
+      @year = time.year
+      self.zeller(@month, @year, false)
+
+    #unspecified number of rows
+    elsif input.length == 1
+      year = input[0].dup
+      @month = "annual"
+      @rows = 4
+      year.chomp!
+      @year = year.to_i
+      @calendar = []
+      @format_array = [[4, 3]]
+      self.annual(@year)
+
+    #specified number of rows
+    elsif input.length > 2
+      if input.length == 3 && input[1] == "rows"
+        rows = input[2].dup
+        @rows = rows.to_i
+
+        #even number of rows
+        if @rows == 2 || @rows == 3 || @rows ==4 || @rows == 6 || @rows == 12
+          year = input[0].dup
+          @month = "annual"
+          year.chomp!
+          @year = year.to_i
+          columns = 12/@rows
+          @calendar = []
+          @format_array = [[@rows, columns]]
+          self.annual(@year)
+
+        #bad row argument
+        elsif @rows < 2 || @rows > 12
+          puts "INPUT ERROR"
+          puts "Number of rows must be between 2 and 12"
+
+        #5 rows
+        else
+          if @rows == 5
+            year = input[0].dup
+            @month = "annual"
+            year.chomp!
+            @year = year.to_i
+            @format_array = [[3, 3], [1, 2], [1, 1]]
+            @calendar = []
+            self.annual(@year)
+
+          #7-11 rows
+          else
+            year = input[0].dup
+            @month = "annual"
+            year.chomp!
+            @year = year.to_i
+            temp_rows = 12 % @rows
+            extra_rows = @rows - (12 % @rows)
+            @rows = temp_rows
+            @format_array = [[@rows, 2], [@extra_rows, 1]]
+            @calendar = []
+            self.annual(@year)
+          end
+        end
+
+      #bad input
+      else
+        puts "INPUT ERROR"
+        puts "Accepted Format is: 2014, 01 2014, January 2014, or 2014 rows 2"
+      end
+
+    #single month
+    else
+      month = input[0].dup
+      year = input[1].dup
+      month.chomp!
+      @month = month
+      year.chomp!
+      @year = year.to_i
+      self.zeller(@month, @year, false)
+    end
+  end #of initialize
+
+
+  def annual(year)
+    month = 0
+    12.times do
+      month += 1
+      self.zeller(month, year, true)
+    end
+  end
+
+end

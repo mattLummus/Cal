@@ -1,32 +1,43 @@
 #!/usr/bin/env ruby
+$LOAD_PATH << "lib"
+require 'zeller'
+require 'assemble_month'
+require 'print_cal'
+
+#Calendar calls zeller for single month, or annual for a year
+#annual calls zeller once for each month
+#zeller finds the first day of a month and calls assemble_month (which creates an array of 8 strings for each month's calendar)
+#assemble_month then either calls the single_print or annual_print method
+#single_print loops through the month array and prints each line
+#annual_print loops through the entire calendar and prints in the specified format (e.x. [4x3], [2x6], [3x3, 1x2, 1x1], etc.)
 
 #Calendar is called at end of file
 class Calendar
+  LINE_WIDTH = 20
+  MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
   attr_accessor :month
   attr_accessor :year
-  attr_accessor :calendar
-  attr_accessor :rows
+  attr_accessor :calendar_array
   attr_accessor :format_array
 
   def initialize(*args)
     input = args[0]
-    @months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
     #current month (no input)
     if input.length == 0
       time = Time.new
       @month = time.month
       @year = time.year
-      self.zeller(@month, @year, false)
+      zeller(@month, @year, false)
+      #self.zeller(@month, @year, false)
 
     #unspecified number of rows
     elsif input.length == 1
       year = input[0].dup
-      @month = "annual"
-      @rows = 4
       year.chomp!
       @year = year.to_i
-      @calendar = []
+      @month = "annual"
+      @calendar_array = []
       @format_array = [[4, 3]]
       self.annual(@year)
 
@@ -34,46 +45,36 @@ class Calendar
     elsif input.length > 2
       if input.length == 3 && input[1] == "rows"
         rows = input[2].dup
-        @rows = rows.to_i
-
-        #even number of rows
-        if @rows == 2 || @rows == 3 || @rows ==4 || @rows == 6 || @rows == 12
-          year = input[0].dup
-          @month = "annual"
-          year.chomp!
-          @year = year.to_i
-          columns = 12/@rows
-          @calendar = []
-          @format_array = [[@rows, columns]]
-          self.annual(@year)
+        rows = rows.to_i
+        year = input[0].dup
+        year.chomp!
+        @month = "annual"
+        @year = year.to_i
+        @calendar_array = []
 
         #bad row argument
-        elsif @rows < 2 || @rows > 12
+        if rows < 2 || rows > 12
           puts "INPUT ERROR"
           puts "Number of rows must be between 2 and 12"
 
+        #even number of rows
+        elsif rows == 2 || rows == 3 || rows ==4 || rows == 6 || rows == 12
+          columns = 12/rows
+          @format_array = [[rows, columns]]
+          self.annual(@year)
+
         #5 rows
         else
-          if @rows == 5
-            year = input[0].dup
-            @month = "annual"
-            year.chomp!
-            @year = year.to_i
+          if rows == 5
             @format_array = [[3, 3], [1, 2], [1, 1]]
-            @calendar = []
             self.annual(@year)
 
           #7-11 rows
           else
-            year = input[0].dup
-            @month = "annual"
-            year.chomp!
-            @year = year.to_i
-            temp_rows = 12 % @rows
-            extra_rows = @rows - (12 % @rows)
-            @rows = temp_rows
-            @format_array = [[@rows, 2], [@extra_rows, 1]]
-            @calendar = []
+            temp_rows = 12 % rows
+            extra_rows = rows - (12 % rows)
+            rows = temp_rows
+            @format_array = [[rows, 2], [extra_rows, 1]]
             self.annual(@year)
           end
         end
@@ -89,10 +90,11 @@ class Calendar
       month = input[0].dup
       year = input[1].dup
       month.chomp!
-      @month = month
       year.chomp!
+      @month = month
       @year = year.to_i
-      self.zeller(@month, @year, false)
+      zeller(@month, @year, false)
+      #self.zeller(@month, @year, false)
     end
   end #of initialize
 
@@ -101,23 +103,25 @@ class Calendar
     month = 0
     12.times do
       month += 1
-      self.zeller(month, year, true)
+      zeller(month, year, true)
+      #self.zeller(month, year, true)
     end
   end
 
+
+#PRIVATE METHODS------------------------------------------------------------------
+#---------------------------------------------------------------------------------
+private
 
   def zeller(month, year, annual)
     #checks to see if the written format rather than the number format
     if month.to_s.length > 3
       month.downcase!
       month.capitalize!
-
       #converts to number format
-      month = months.index(month)
-      month += 1
+      month = (MONTHS.index(month)) + 1
     end
 
-    h = ""
     q = 1
     m = month.to_i
     k = year%100
@@ -144,13 +148,13 @@ class Calendar
     #contains array of strings to be assembled when printed
     this_month = []
 
-    days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+    #sets month name and number of days
     day_array = [31, "x", 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-    temp_day = days[h]
     m -= 12 if m > 12
-    month = @months[m-1]
+    month = MONTHS[m-1]
     days = day_array[m-1]
 
+    #checks for leap year and sets days for February
     if days == "x"
       if year % 4 != 0
         days = 28
@@ -162,15 +166,15 @@ class Calendar
     end
 
     #CAL HEADER-------
-    total_length = 20
+    #total_length = 20
     month_length = month.length
     header = ""
     if @month == "annual"
-      margin_space = (total_length - month_length) / 2
+      margin_space = (LINE_WIDTH - month_length) / 2
       margin_space.times { header << " " }
       header << month
     else
-      margin_space = (total_length - (month_length + 5)) / 2
+      margin_space = (LINE_WIDTH - (month_length + 5)) / 2
       margin_space.times { header << " " }
       header << month
       header << " "
@@ -191,17 +195,17 @@ class Calendar
     leading_space.times do
       row << " "
     end
+
+    #if loops starts without printing this first the spacing will be incorrect
     row << "1"
     count += 1
     day += 1
 
     #finish 1st row
-    while count < 20
-      if day < 10
-        row << "  "
-      else
-        row << " "
-      end
+    while count < LINE_WIDTH
+      #adds extra space if one digit number
+      row << " " if day < 10
+      row << " "
       row << day.to_s
       day += 1
       count += 3
@@ -218,7 +222,8 @@ class Calendar
       day_count = 0
       while day_count <= 7
         day_count += 1
-        while count < 20
+        while count < LINE_WIDTH
+          #adds extra space if one digit number
           row << " " if day < 10
           row << day.to_s
           day += 1
@@ -235,11 +240,13 @@ class Calendar
       this_month << row
       row_count += 1
     end
+
+    #adds line breaks if necessary
     (6 - row_count).times {this_month << ""}
 
     if annual == true
-      @calendar << this_month
-      annual_print if @calendar.length == 12
+      @calendar_array << this_month
+      annual_print if @calendar_array.length == 12
     else
       single_print(this_month)
     end
@@ -258,46 +265,57 @@ class Calendar
 
 
   def annual_print
-    print_title = true
+    #index keeps track of how many months have already been printed
     index = 0
+    print_title = true
 
+    #loops through to set specified format of rows and columns
     @format_array.each do |rows, columns|
+
+      # prints calendar header if nothing has been printed yet
       if print_title == true
         title_line = ""
-        title_space = ( (20*columns) + (2*(columns-1)) -4 ) / 2
+        title_space = ( (LINE_WIDTH*columns) + (2*(columns-1)) -4 ) / 2
         (title_space - 1).times {title_line << " "}
         title_line << @year.to_s
         puts title_line
+
         line_break = ""
         puts line_break
       end
 
+      #loop for number of rows at specified format
       rows.times do #rows
         print_title = false
+
+        #contains month arrays currently being printed
         temp_months = []
         column_index = 0
         columns.times do
-          temp_months << @calendar[index + column_index]
+          temp_months << @calendar_array[index + column_index]
           column_index += 1
         end
-        line_index = 0
 
+        line_index = 0
         8.times do #lines per row
           temp_string = ""
-          inner_index = 0
 
-          columns.times do #each month per row
+          inner_index = 0
+          columns.times do #loops through current months per row and concats them to one line
             temp_month = temp_months[inner_index]
             temp_line = temp_month[line_index]
             temp_string << temp_line
+
+            #adjusts spacing
             if inner_index != columns - 1
-              (20 - temp_line.length).times {temp_string << " "}
+              (LINE_WIDTH - temp_line.length).times {temp_string << " "}
             end
             temp_string << "  " if inner_index < columns - 1
+
+            #prints current line
             puts temp_string if inner_index == columns - 1
             inner_index += 1
-          end #of inner loop (iterates through each month on current row)
-
+          end #of inner loop
           line_index += 1
         end #of row loop (concats current months onto same lines)
 
